@@ -34,8 +34,10 @@ class App(tk.Tk):
         frame = ttk.Frame(self, padding=18)
         frame.pack(fill="both", expand=True)
         ttk.Label(frame, text="CSV Workbench", font=("Segoe UI", 18, "bold")).pack(anchor="w")
-        ttk.Label(frame, text="複数CSVの見出しを揃えて、結合・整理・集計します。入力ファイルは変更しません。",
-                  wraplength=690).pack(anchor="w", pady=(2, 12))
+        ttk.Label(frame, text="結合CSV：同じフォルダならファイル名順に読み込み、各CSV内の行順を保ちます。重複は先の行を残し、並び替え列を選んだ場合だけ行順を変更します。",
+                  wraplength=690).pack(anchor="w", pady=(2, 2))
+        ttk.Label(frame, text="集計CSV：合計列・グループ列は別ファイルの集計にだけ使います。入力CSVは変更しません。",
+                  wraplength=690).pack(anchor="w", pady=(0, 10))
 
         source = ttk.LabelFrame(frame, text="1. 入力CSV", padding=10)
         source.pack(fill="both")
