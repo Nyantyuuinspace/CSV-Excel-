@@ -9,3 +9,14 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m unittest discover -s tests -v
+      - name: Check Windows launcher command
+        shell: pwsh
+        run: |
+          $shim = Join-Path $env:RUNNER_TEMP 'launcher-shim'
+          New-Item -ItemType Directory -Force -Path $shim | Out-Null
+          Set-Content -Path (Join-Path $shim 'py.cmd') -Value '@echo off','echo %* > "%TEMP%\csv-workbench-args.txt"' -Encoding ascii
+          $env:PATH = "$shim;$env:PATH"
+          cmd /c start_windows.bat
+          if ($LASTEXITCODE -ne 0) { throw 'Launcher failed' }
+          $arguments = Get-Content (Join-Path $env:TEMP 'csv-workbench-args.txt')
+          if ($arguments -notmatch '-3 .+app\.py') { throw "Unexpected launcher arguments: $arguments" }
